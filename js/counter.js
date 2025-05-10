@@ -1,0 +1,45 @@
+const counters = document.querySelectorAll('.counter');
+
+const formatNumber = (number) => {
+  return number.toLocaleString('pt-BR'); // Formata como 1.000, 2.500 etc
+};
+
+const animateCounter = (counter) => {
+  counter.innerText = '0';
+  const target = +counter.getAttribute('data-target');
+  const duration = 2000;
+  const frameRate = 30;
+  const totalFrames = duration / frameRate;
+  let frame = 0;
+
+  const updateCounter = () => {
+    frame++;
+    const progress = frame / totalFrames;
+    const current = Math.round(target * progress);
+
+    counter.innerText = formatNumber(current);
+
+    if (progress < 1) {
+      setTimeout(updateCounter, frameRate);
+    } else {
+      counter.innerText = formatNumber(target); 
+    }
+  };
+
+  updateCounter();
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      observer.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.5
+});
+
+counters.forEach(counter => {
+  observer.observe(counter);
+});

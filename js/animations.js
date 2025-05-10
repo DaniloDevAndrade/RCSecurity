@@ -1,0 +1,23 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const texts = document.querySelectorAll('.texts-services');
+  
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, {
+      threshold: 0.3 // ativa quando 30% do elemento aparece
+    });
+  
+    texts.forEach((text, index) => {
+      if (index % 2 === 0) {
+        text.classList.add('animate-right');
+      } else {
+        text.classList.add('animate-left');
+      }
+      observer.observe(text);
+    });
+  });
+  
